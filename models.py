@@ -44,6 +44,7 @@ class Encoder(nn.Module):
 
 
 def reparameterize(mu, logvar):
+    logvar = torch.clamp(logvar, min=-10, max=10)
     std = torch.exp(0.5 * logvar)
     eps = torch.randn_like(std)
     return mu + eps * std
