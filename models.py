@@ -105,4 +105,3 @@ class Autoencoder(nn.Module):
 
 # GAN-Architektur mit Generator und Diskriminator -------------------------------------
 
-c
