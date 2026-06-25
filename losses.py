@@ -10,7 +10,11 @@ def vae_loss(recon_x, x, mu, logvar, beta=0.1):
     return recon_loss + beta * kl_loss, recon_loss, beta * kl_loss
 
 
-def weighted_l1_loss(recon_x, x, mask):
-    l1 = torch.abs(recon_x - x)
-    weighted = l1 * mask
-    return weighted.sum() / (mask.sum() + 1e-8)   # über Maskenpixel mitteln
+
+
+def weighted_l1_loss(recon_x, x, mask, extra=4.0):
+    """L1 über das ganze Bild, Wolkenregionen (mask=1) zusätzlich gewichtet.
+    Kein Wolkengrößen-Artefakt, weil über alle Pixel gemittelt wird (alle Gewichte >=1)."""
+    l1_map = torch.abs(recon_x - x)
+    weight = 1.0 + extra * mask
+    return (l1_map * weight).mean()
