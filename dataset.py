@@ -67,6 +67,7 @@ class Rice2(Dataset):
             if k:
                 cloudy, label, mask = F.rotate(cloudy, k), F.rotate(label, k), F.rotate(mask, k)
 
+        # *2-1 to scale from [0, 1] to [-1, 1]
         cloudy = F.to_tensor(cloudy) * 2 - 1
         label  = F.to_tensor(label)  * 2 - 1
         mask   = (F.to_tensor(mask) > 0.5).float()
