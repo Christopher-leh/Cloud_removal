@@ -150,3 +150,40 @@ def plot_samples_gan(
     plt.close(fig)
 
 
+def to_img(t):
+    """[-1,1] Tensor (C,H,W) -> [0,1] numpy (H,W,C) für skimage."""
+    t = (t.clamp(-1, 1) + 1) / 2
+    return t.cpu().numpy().transpose(1, 2, 0)
+
+def plot_test_samples(generator, dataloader, device, n_show=5, save_path=None, use_masks=False):
+    generator.eval()
+    cloudy, target, mask = next(iter(dataloader))
+    cloudy, target, mask = cloudy.to(device), target.to(device), mask.to(device)
+    n_show = min(n_show, cloudy.size(0))
+
+    with torch.no_grad():
+        if use_masks:  
+            output = generator(torch.cat((cloudy, mask), dim=1))
+        else:
+            output = generator(cloudy)
+
+    cloudy_d = denorm(cloudy.cpu())
+    target_d = denorm(target.cpu())
+    output_d = denorm(output.cpu())
+
+    rows = [("Cloudy", cloudy_d), ("Output", output_d), ("Ground Truth", target_d)]
+
+    fig, axes = plt.subplots(len(rows), n_show, figsize=(n_show * 3, len(rows) * 3))
+    if n_show == 1:
+        axes = axes.reshape(-1, 1)
+    for r, (title, imgs) in enumerate(rows):
+        for i in range(n_show):
+            axes[r, i].imshow(imgs[i].permute(1, 2, 0).clamp(0, 1))
+            axes[r, i].axis("off")
+        axes[r, 0].set_title(title, loc="left", fontsize=10)
+
+    plt.tight_layout()
+    if save_path:
+        plt.savefig(save_path, bbox_inches="tight")
+    plt.show()
+    plt.close(fig)
