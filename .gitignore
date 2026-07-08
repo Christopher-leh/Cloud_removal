@@ -2,3 +2,9 @@ RICE_DATASET/RICE1/
 RICE_DATASET/outputs/
 *.ptcheckpoints/
 *pt
+
+__pycache__/
+RICE2/
+checkpoints/
+*.pyc
+.ipynb_checkpoints/
