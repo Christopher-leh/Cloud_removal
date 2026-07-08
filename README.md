@@ -40,8 +40,8 @@ Evaluated on the held-out test set (148 images):
 
 Key observations: the CVAE produces blurry reconstructions due to its architecture. Adversarial training yields sharper textures at a small cost in SSIM, while extended training with LR decay achieves the best results on both metrics. Since the models optimize different loss functions, PSNR/SSIM serve as the shared, objective comparison, complemented by visual inspection.
 
-[Comparison](outputs/vergleich4.png)
-[Comparison](outputs/vergleich7.png)
+![Comparison](outputs/vergleich4.png)
+![Comparison](outputs/vergleich7.png)
 
 
 ## Setup
